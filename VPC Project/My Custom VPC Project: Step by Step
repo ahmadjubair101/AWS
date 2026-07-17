@@ -76,5 +76,46 @@ Select the Private Subnet you created and then click Save associations.
 
 # Step 9: Create Security Groups
 
+Navigate to Security groups and click Create security group.
+Add a suitable name for the group, connect your vpc and then the following configuration:
+Inbound rules: Type= SSH       Source= My IP      Type= HTTP     Source= My IP
+Outbound rules: Keep as default.
+Click Create security group.
+
+Create another private security group. Settings are as follows:
+Inbound rules: Type=SSH        Source= Public SG that I created before this one.
+This allows only instances in that security group to connect.
+Outbound rules: Keep as default.
+Click Create security group.
+
+# Step 10: Launch Public EC2
+
+Navigate to EC2-Instances-Launch Instances.
+Configure the settings to the following:
+Use a custom name
+AMI= Amazon Linux 2023, Instance type= t3.micro  Key pair= Either create a new one or use existing, select your VPC
+Subnet= Public Subnet that you created earlier, Auto-assign public IP= Enable, Security Group= Public SG.
+Launch instance.
+
+# Step 11: Launch Private EC2
+
+Launch another instance with the following settings:
+Same AMI and Instance type and Key pair as the public EC2.
+Select your created VPC, Subnet= Private Subnet that was created, Auto-assign public IP= Disable, Security Group= Private SG
+Launch instance.
+
+# Step 12: Test Connectivity
+
+SSH from your device using the following command: ssh -i mykey.pem ec2-user@<Public-IP>
+Should successfully connect.
+
+# Bonus Step: Enable Cloudwatch
+
+Go to your Instance and select: Actions- Monitor and Troubleshoot.
+Install the Cloudwatch Agent and then check the metrics on the Monitoring tab.
+
+# If you want an even secure way to ssh into your Private EC2, utilise Bastion for this.
+
+
 
 
