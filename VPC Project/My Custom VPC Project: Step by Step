@@ -1,1 +1,80 @@
+# Step 1: Creating the VPC
+
+This is done by inputting a custom name for your VPC.
+Next step is to configure the settings to the following:
+IPv4 CIDR- 10.0.0.0/16, No IPv6 CIDR, Tenancy= Default
+
+# Step 2: Create the Public Subnet
+
+Navigate to Subnets and go to Create Subnet.
+Configure the settings to the following:
+Select a name for the subnet, pick your suitable AZ (Availability Zone), and your CIDR- 10.0.1.0/24
+Check settings and then create Subnet.
+To enable Auto-Assign Public IP, click on the subnet-Actions-Edit subnet settings.
+Tick the box labelled: Enable auto-assign public IPv4 address
+
+# Step 3: Create the Private Subnet
+
+Go back to the Subnets main menu and click on Create Subnet again to create another subnet.
+Configure the settings again through the following:
+Select a name that can differentiate between the public and private subnet, pick the same AZ, and use the CIDR 10.0.2.0/24
+Check the settings and create the Subnet. DO NOT ENABLE AUTO-ASSIGN PUBLIC IP.
+
+# Step 4: Create an Internet Gateway
+
+Navigate to Internet Gateways and click Create Internet Gateway.
+Provide a name and click Create.
+Once created, click Actions-Attach to VPC.
+Attach the VPC you had created.
+
+# Step 5: Create an Elastic IP
+
+Navigate to Elastic IPs.
+Click on Allocate Elastic IP address.
+Continue with the default settings provided and click Allocate.
+
+# Step 6: Create the NAT Gateway
+
+Navigate to Nat Gateways and click Create NAT Gateway.
+Create a name for this.
+Under Availability mode: Select Zonal and then the Public Subnet that you created.
+Select Public for connectivity type and then select your created Elastic IP.
+Double check settings and click Create NAT gateway.
+Wait until the state turns to Available.
+
+# Step 7: Create the Public Route Table
+
+Navigate to Route tables and click Create route table.
+State a name for the route table, select your VPC and click Create route table.
+
+# Add Internet Route
+
+Navigate to Routes-Edit Routes and then select Add route.
+Destination= 0.0.0.0/0, Target= Internet Gateway then select your IGW.
+Click Save changes.
+
+# Associate Public Subnet
+
+Navigate to Subnet associations and then click Edit subnet associations.
+Select the Public Subnet you created and then click Save associations.
+
+# Step 8: Create the Private Route Table
+
+Navigate back to route tables and create another route table.
+Give this a name to differentiate from the Public Route Table.
+
+# Add NAT Route
+
+Go to Edit Routes and Add route.
+Destination= 0.0.0.0/0, Target= NAT Gateway then select your NGW.
+Click Save changes.
+
+# Associate Private Subnet
+
+Navigate to Subnet associations and then click Edit subnet associations.
+Select the Private Subnet you created and then click Save associations.
+
+# Step 9: Create Security Groups
+
+
 
