@@ -6,7 +6,9 @@ This is a repository showcasing my learning of the various different features an
 
 # AWS #
 **Introduction to AWS**
+
 **Simple facts about AWS**
+
 **It's Cloud use cases**
 **AWS Regions**
 **AWS AZs (Availability Zones)**
