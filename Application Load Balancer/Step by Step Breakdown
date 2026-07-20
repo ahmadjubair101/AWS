@@ -1,0 +1,99 @@
+# Step 1: Creating the EC2
+
+
+Navigate to AWS Console → EC2 → Launch Instance
+Add a name for this EC2.
+AMI = Amazon Linux 2023, Instance type = t3.micro, Key Pair= An existing pair you have or created a new one.
+Network= The custom VPC you may already have, Private Subnet, Auto-Assign Public IP= Disabled.
+Security Group= Create a new one.
+User Data= Add a file that may already exist or paste the code into the box that appears.
+The code as follows:
+#!/bin/bash
+dnf update -y
+dnf install -y httpd
+
+systemctl start httpd
+systemctl enable httpd
+
+echo "<h1>ALB Web Server</h1>" > /var/www/html/index.html
+In this case, it downloads Apache and this will display the page as ALB Web Server.
+Once completed, launch the EC2.
+
+
+# Step 2: Launch the second EC2 Instance
+
+
+Use the same details as above. Only have a different private subnet and create an additional web server.
+Now you should have two instances.
+
+
+# Step 3: Create a EC2 Security Group rule
+
+
+Head to the EC2 Instance - Security Groups - The security group that was created.
+Edit Inbound rules, and add HTTP.
+
+
+# Step 4: ALB Security Group
+
+
+Head to VPC - Security Groups - Create security group
+Add a name to the group and the following inbound rules:
+HTTP: Port 80, Source = Anywhere IPv4, 
+Outbound: Leave as default settings (All traffic).
+create security group.
+
+
+# Step 5: Restrict the EC2 only to the ALB (Application Load Balancer).
+
+
+Navigate back to Instances - Security Groups.
+Go to the  first security group created, Edit inbound rules and remove the temporary HTTP placeholder.
+Add a HTTP inbound rule with the Application Load Balancer Security Group attached.
+This will ensure any traffic from the ALB points to the web servers that were created.
+
+
+# Step 6: Target Groups
+
+Navigate to Target Groups in Instances - Create target group.
+Use the following for the properties:
+Target type= Instances, Name the Target Group, Protocol= HTTP, Port = 80, IP Address= IPv4, VPC= Your created one.
+Health Check: /, All other properties are left as default.
+Click Next - Register Targets.
+Select your Security Group.
+Include as pending below, then click Create Target group.
+
+
+# Step 7: Create the Application Load Balancer
+
+
+Navigate to Load Balancers - Create - Choose Application Load Balancer.
+Add the following custom properties:
+Choose a suitable Name, Scheme= Internet Facing, IP= IPv4, 
+Network Mapping= Choose your VPC, Both Private Subnets, and spread the ALB to two Availability Zones.
+Security group created for the Application Load Balancer, Listene= HTTP:80, Forward to the TG that you had created in the last step.
+Leave everything else as it is, Create load balancer.
+
+
+# Step 8: Health Checks
+
+
+Head to the target group you created on: Target Groups.
+From here, check to see your target is showing as Healthy.
+If unhealthy, check the following: 
+Apache is running, User data completed successfully, EC2 instances have a route to the internet (via NAT Gateway if in private subnets) so they could install packages.
+Security groups allow ALB → EC2 on port 80.
+
+
+# Step 9: Tests
+
+Head to Load Balancers and select your LB.
+Copy the DNS name and paste it into your browser.
+
+
+# Step 10: Confirmation
+
+Verify EC2 is not Publicy Accessible due to no public IP, private subnates and only being able to accept HTTP from the Security Group created for the ALB.
+
+
+
