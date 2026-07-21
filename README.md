@@ -218,7 +218,9 @@ This is a repository showcasing my learning of the various different features an
 # Projects #
 
 **Custom VPC Project**: Created a custom VPC with one public and one private subnet, then I had set up the correct routing for internet access, and deployed EC2 instances across them. (Head to VPC Project folder for a step by step guide and screenshots)
+
 **Application Load Balancer**: Deployed two EC2 instances behind an ALB that can handle all incoming traffic and accessible directly from the internet. (Head to Application Load Balancer folder)
+
 **S3 Static Website + Cloudfront + Route53**: A production-ready static website that teaches S3 hosting, permissions, caching, HTTPS, and routing. I utilised S3 for the hosting, Cloudfront for CDN + HTTPS, and Route53 for the domain. (Head to Static Website folder)
 
 
