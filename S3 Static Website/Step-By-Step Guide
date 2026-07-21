@@ -1,1 +1,84 @@
+# Step 1: Create the S3 Bucket
 
+On the AWS Console, Search S3 and Create bucket.
+Name the bucket and choose the region you have been using.
+Leave rest of the settings as default.
+
+# Step 2: Upload files for Website
+
+Create two HTML files on your computer: one named index.html and another named error.html (Use VSCode for this)
+Within the bucket, click upload and select your HTML files and then click upload on the bottom of the page.
+
+My code for index.html:
+<!DOCTYPE html>
+<html>
+<head>
+<title>My AWS Website</title>
+</head>
+
+<body>
+
+<h1>Hello from AWS!</h1>
+
+<p>Static Website hosted on S3</p>
+
+</body>
+</html>
+
+My code for error.html:
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Error</title>
+</head>
+
+<body>
+
+<h1>404</h1>
+
+<p>Page Not Found</p>
+
+</body>
+</html>
+
+# Step 3: Enable Static Website Hosting
+
+Within the bucket, head to Properties-Static Website Hosting-Edit
+Choose the following: Enable, Hosting type= Host a Static website, choose your index and error document and then save the changes.
+A website endpoint will appear, this will not need to be tested as of yet due to the bucket being private.
+
+# Step 4: Make Objects Public
+
+Within the bucket, head to Permissions and Disable Block Public Access-Edit-Untick: Block all public access.
+Confirm and save.
+Head to Bucket policy within Permissions and paste JSON information. Change where it says my-static-website-12345 with the name of your bucket.
+{
+  "Version":"2012-10-17",
+  "Statement":[
+    {
+      "Sid":"PublicRead",
+      "Effect":"Allow",
+      "Principal":"*",
+      "Action":"s3:GetObj# ect",
+      "Resource":"arn:aws:s3:::my-static-website-12345/*"
+    }
+  ]
+}
+Click Save changes.
+
+# Step 5: CloudFront Distribution
+
+Search CloudFront and then Create distribution.
+Name the distribution and then go Next.
+For the Origin ID, enter your website endpoint which can be found in the following: Your S3 Bucket- Properties- Static Website Hosting.
+Go to Customize Origin settings and then go to Protocol: HTTP only.
+Go to Customize Cache settings and select: redirect Redirect HTTP to HTTPS, Allowed HTTP methods: GET, HEAD
+For Cache policy, choose: Managed-CachingOptimized
+Click next until you are on the final page then create the distribution.
+Click edit to edit the Default root and enter in index.html
+
+# Step 6: Test CloudFront Website
+
+Copy and Paste your Distribution domain name into a browser search bar and click enter.
+Your website should now appear.
