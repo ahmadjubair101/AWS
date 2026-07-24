@@ -223,5 +223,5 @@ This is a repository showcasing my learning of the various different features an
 
 **S3 Static Website + Cloudfront + Route53**: A production-ready static website that teaches S3 hosting, permissions, caching, HTTPS, and routing. I utilised S3 for the hosting, Cloudfront for CDN + HTTPS, and Route53 for the domain. (Head to Static Website folder)
 
-
+**Serverless API with Lambda, IAM, and API Gateway**: Built a REST API using API Gateway, Lambda and DynamoDB. (Head to Serverless API folder)
 
